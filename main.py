@@ -1,11 +1,25 @@
-import kivy
-
 from kivy.app import App
-from kivy.uix.label import Label
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.core.window import Window
+from kivy.graphics import Color, Rectangle
 
-class MyApp(App):
+
+# Declare both screens
+class SearchMedicineScreen(Screen):
+    pass
+
+class SearchArticlesScreen(Screen):
+    pass
+
+class WeGamingScreen(Screen):
+    pass
+
+class TestApp(App):
+
     def build(self):
-        return Label(text='Hello World')
-    
+        Window.size = (360, 800)
+        return
+
 if __name__ == '__main__':
-    MyApp().run()
+    TestApp().run()

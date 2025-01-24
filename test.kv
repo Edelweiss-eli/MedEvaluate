@@ -1,0 +1,64 @@
+<SearchMedicineScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        TextInput:
+            hint_text: 'Search for medicine'
+            multiline: False
+            size_hint_y: None
+            height: '50dp'
+        BoxLayout:
+            ColoredBox:
+                color: (1, 0, 0, 1)
+                size_hint_x: 0.5
+            ColoredBox:
+                color: (0, 0, 1, 1)
+                size_hint_x: 0.5
+
+<ColoredBox@Widget>
+    color: (1, 1, 1, 1)
+    canvas.before:
+        Color: 
+            rgba: root.color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+<SearchArticlesScreen>:
+    BoxLayout:
+        Button:
+            text: 'Wow we are searching'
+        Button:
+            text: 'hmm still searching'
+
+<WeGamingScreen>
+    BoxLayout:
+        Button:
+            text: 'We are gaming'
+        Button:
+            text: 'We are gaming too'
+
+BoxLayout:
+    orientation: 'vertical'
+
+    ScreenManager:
+        id: screen_manager
+        SearchMedicineScreen:
+            name: 'medicine_screen'
+        SearchArticlesScreen:
+            name: 'article_screen'
+        WeGamingScreen:
+            name: 'gaming_screen'
+    
+    BoxLayout:
+        size_hint_y: None
+        height: '100dp'
+        Button:
+            text: 'Search Medicine'
+            on_press: screen_manager.current = 'medicine_screen'
+        Button:
+            text: 'Research Articles'
+            on_press: screen_manager.current = 'article_screen'
+        Button:
+            text: 'Its Game time'
+            on_press: screen_manager.current = 'gaming_screen'
