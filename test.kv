@@ -1,17 +1,28 @@
 <SearchMedicineScreen>:
     BoxLayout:
+        padding: 10
         orientation: 'vertical'
-        TextInput:
-            hint_text: 'Search for medicine'
-            multiline: False
+        BoxLayout:
             size_hint_y: None
             height: '50dp'
+            spacing: 5
+            TextInput:
+                hint_text: 'Search for the type of medicine you need.'
+                multiline: False
+                size_hint_y: None
+                height: '50dp'
+            Button:
+                text: 'Search'
+                height: '50dp'
+                width: '50dp'
+                size_hint_x: None
+                size_hint_y: None
         BoxLayout:
             ColoredBox:
-                color: (1, 0, 0, 1)
+                color: (1, 1, 1, 0.25)
                 size_hint_x: 0.5
             ColoredBox:
-                color: (0, 0, 1, 1)
+                color: (1, 1, 1, 0.5)
                 size_hint_x: 0.5
 
 <ColoredBox@Widget>
@@ -26,33 +37,88 @@
 
 <SearchArticlesScreen>:
     BoxLayout:
-        Button:
-            text: 'Wow we are searching'
-        Button:
-            text: 'hmm still searching'
+        padding: 10
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: None
+            height: '50dp'
+            spacing: 5
+            TextInput:
+                hint_text: 'Search for articles.'
+                multiline: False
+                size_hint_y: None
+                height: '50dp'
+            Button:
+                text: 'Search'
+                height: '50dp'
+                width: '50dp'
+                size_hint_x: None
+                size_hint_y: None
 
-<WeGamingScreen>
+
+        BoxLayout:
+            ColoredBox:
+                color: (1, 1, 1, 1, 0.75)
+
+<WeGamingScreen>:
     BoxLayout:
-        Button:
-            text: 'We are gaming'
-        Button:
-            text: 'We are gaming too'
+        padding: 10
+        orientation: 'vertical'
+        Label:
+            text: 'Drug No. XX \nY points'
+            font_size: '20sp'
+            size_hint_y: None
+            halign: "center"
+            valign: "middle"
+            size_hint_y: None
+            height: "60dp"
+            text_size: self.width, None
+        BoxLayout:
+            padding: 10
+            Button:
+                text: 'Branded'
+                size_hint_y: None
+                height: '100dp'
+            Button:
+                text: 'Generic'
+                size_hint_y: None
+                height: '100dp'
+
+<HomeScreen>:
+    BoxLayout:
+        padding: 10
+        Label:
+            text: 'This is the home screen, there should be text here describing the app'
+            color: (1,1,1,1)
+            font_size: '18sp'
+            size_hint_x: 1
+            size_hint_y: 1
+            height: '100dp'
+            text_size: self.width, None
+            halign: 'center'
+            valign: 'middle'
 
 BoxLayout:
     orientation: 'vertical'
 
     ScreenManager:
         id: screen_manager
+        HomeScreen:
+            name: 'home_screen'
         SearchMedicineScreen:
             name: 'medicine_screen'
         SearchArticlesScreen:
             name: 'article_screen'
         WeGamingScreen:
             name: 'gaming_screen'
+
     
     BoxLayout:
         size_hint_y: None
         height: '100dp'
+        Button:
+            text: 'Home'
+            on_press: screen_manager.current = 'home_screen'
         Button:
             text: 'Search Medicine'
             on_press: screen_manager.current = 'medicine_screen'

@@ -5,7 +5,9 @@ from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 
 
-# Declare both screens
+class HomeScreen(Screen):
+    pass
+
 class SearchMedicineScreen(Screen):
     pass
 
