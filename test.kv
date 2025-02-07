@@ -1,3 +1,5 @@
+#:import MapView kivy.garden.mapview.MapView
+
 <SearchMedicineScreen>:
     BoxLayout:
         padding: 10
@@ -58,7 +60,7 @@
 
         BoxLayout:
             ColoredBox:
-                color: (1, 1, 1, 1, 0.75)
+                color: (1, 1, 1, 0.75)
 
 <WeGamingScreen>:
     BoxLayout:
@@ -98,6 +100,14 @@
             halign: 'center'
             valign: 'middle'
 
+<MapScreen>:
+    BoxLayout:
+        MapView:
+            id: map_view
+            lat: 14.8527
+            lon: 120.8160
+            zoom: 20
+
 BoxLayout:
     orientation: 'vertical'
 
@@ -111,6 +121,8 @@ BoxLayout:
             name: 'article_screen'
         WeGamingScreen:
             name: 'gaming_screen'
+        MapScreen:
+            name: 'map_screen'
 
     
     BoxLayout:
@@ -126,5 +138,9 @@ BoxLayout:
             text: 'Research Articles'
             on_press: screen_manager.current = 'article_screen'
         Button:
-            text: 'Its Game time'
+            text: 'Game'
             on_press: screen_manager.current = 'gaming_screen'
+        Button:
+            text: 'Nearest Drug Stores'
+            on_press: screen_manager.current = 'map_screen'
+
