@@ -64,27 +64,37 @@
 
 <WeGamingScreen>:
     BoxLayout:
-        padding: 10
         orientation: 'vertical'
+        padding: 10
+
         Label:
-            text: 'Drug No. XX \nY points'
-            font_size: '20sp'
+            id: score_label
+            text: "Score: " + str(root.score)
             size_hint_y: None
-            halign: "center"
-            valign: "middle"
-            size_hint_y: None
-            height: "60dp"
-            text_size: self.width, None
-        BoxLayout:
-            padding: 10
+            height: '30dp'
+
+        Image:
+            id: img
+            source: root.image_source
+            size_hint_y: 0.6
+
+        GridLayout:
+            cols: 2
+            spacing: 10
+            size_hint_y: 0.4
+
             Button:
-                text: 'Branded'
-                size_hint_y: None
-                height: '100dp'
+                id: choice_1
+                on_press: root.check_answer(self)
             Button:
-                text: 'Generic'
-                size_hint_y: None
-                height: '100dp'
+                id: choice_2
+                on_press: root.check_answer(self)
+            Button:
+                id: choice_3
+                on_press: root.check_answer(self)
+            Button:
+                id: choice_4
+                on_press: root.check_answer(self)
 
 <HomeScreen>:
     BoxLayout:
