@@ -21,3 +21,9 @@ last func
 medicine tracker
 
 around last week of february/first week of march
+
+pic ng code
+
+combine articles -> home
+
+login logout system
