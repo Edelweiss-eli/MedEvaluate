@@ -11,10 +11,39 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 from kivy_garden.mapview import MapView, MapMarker
-from kivy.properties import StringProperty, NumericProperty
+from kivy.properties import StringProperty, NumericProperty, BooleanProperty
 from kivy.clock import Clock
 
+
+USER_CREDENTIALS = {
+    "user": "123"
+}
+
+class LoginScreen(Screen):
+    error_message = StringProperty("")
+
+    def login(self):
+        email = self.ids.email_input.text
+        password = self.ids.password_input.text
+        
+        if email in USER_CREDENTIALS and USER_CREDENTIALS[email] == password:
+            self.manager.get_screen("home_screen").logged_in = True
+            self.manager.current = "home_screen"
+        else:
+            self.error_message = "Invalid email or password!"
+            
+    def go_to_signup(self):
+        print("Navigate to sign-up screen (to be implemented)")
+    
+    def forgot_password(self):
+        print("Forgot password function (to be implemented)")
+
 class HomeScreen(Screen):
+    logged_in = BooleanProperty(False)
+
+    def on_pre_enter(self):
+        if not self.logged_in:
+            self.manager.current = "login_screen"
     pass
 
 class SearchMedicineScreen(Screen):
@@ -36,7 +65,7 @@ class WeGamingScreen(Screen):
 
         self.image_source = question["image_path"]
         correct_answer = question["correct_answer"]
-        choices = [correct_answer, question["option_1"], question["option_2"], question["option_3"]]
+        choices = [correct_answer, question["option_1"]]
         random.shuffle(choices)
 
         self.ids.img.source = self.image_source
