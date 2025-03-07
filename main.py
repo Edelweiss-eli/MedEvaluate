@@ -14,36 +14,26 @@ from kivy_garden.mapview import MapView, MapMarker
 from kivy.properties import StringProperty, NumericProperty, BooleanProperty
 from kivy.clock import Clock
 
-
+# Dummy user credentials for login
 USER_CREDENTIALS = {
-    "user": "123"
+    "user": "123",
+    "admin@example.com": "adminpass"
 }
 
 class LoginScreen(Screen):
-    error_message = StringProperty("")
-
     def login(self):
         email = self.ids.email_input.text
         password = self.ids.password_input.text
         
         if email in USER_CREDENTIALS and USER_CREDENTIALS[email] == password:
-            self.manager.get_screen("home_screen").logged_in = True
-            self.manager.current = "home_screen"
+            self.manager.current = "main_screen"
         else:
-            self.error_message = "Invalid email or password!"
-            
-    def go_to_signup(self):
-        print("Navigate to sign-up screen (to be implemented)")
-    
-    def forgot_password(self):
-        print("Forgot password function (to be implemented)")
+            print("Invalid email or password!")  # Replace with a Label update for UI feedback
+
+class MainScreen(Screen):
+    pass
 
 class HomeScreen(Screen):
-    logged_in = BooleanProperty(False)
-
-    def on_pre_enter(self):
-        if not self.logged_in:
-            self.manager.current = "login_screen"
     pass
 
 class SearchMedicineScreen(Screen):
@@ -58,7 +48,7 @@ class WeGamingScreen(Screen):
 
     def on_enter(self):
         self.load_question()
-
+    
     def load_question(self):
         df = pd.read_excel("game_data.xlsx")
         question = df.sample(1).iloc[0]
@@ -73,11 +63,11 @@ class WeGamingScreen(Screen):
             btn = self.ids[f"choice_{i+1}"]
             btn.text = choice
             btn.correct = (choice == correct_answer)
-            btn.background_color = (1, 1, 1, 1)
+            btn.background_color = (0,0,0,0)
 
     def check_answer(self, button):
         if button.correct:
-            button.background_color = (0, 1, 0, 1)
+            button.background_color = (0,1,0,1)
             self.score += 1
             print(f"Score: {self.score}")
             Clock.schedule_once(lambda dt: self.load_question(), 0.5)
@@ -99,11 +89,14 @@ class MapScreen(Screen):
             except Exception as e:
                 print(f"Error processing row {index}: {e}")
 
-
-class TestApp(App):
+class MediEvaluateApp(App):
     def build(self):
         Window.size = (360, 800)
-        return Builder.load_file("test.kv")
+        Builder.load_file("test.kv")
+        sm = ScreenManager()
+        sm.add_widget(LoginScreen(name="login_screen"))
+        sm.add_widget(MainScreen(name="main_screen"))
+        return sm
 
-if __name__ == '__main__':
-    TestApp().run()
+if __name__ == "__main__":
+    MediEvaluateApp().run()

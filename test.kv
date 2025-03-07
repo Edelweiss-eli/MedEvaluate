@@ -1,5 +1,12 @@
 #:import MapView kivy.garden.mapview.MapView
 
+ScreenManager:
+    id: screen_manager
+    LoginScreen:
+        name: "login_screen"
+    MainScreen:
+        name: "main_screen"
+
 <LoginScreen>:
     FloatLayout:
         orientation: 'vertical'
@@ -60,27 +67,25 @@
                     background_color: (1, 1, 1, 0.3)
                     foreground_color: (0, 0, 0, 1)
 
-            # "Sign Up" and "Forgot Password?" in a Row
+            # Sign Up and Forgot Password buttons
             BoxLayout:
-                orientation: 'vertical'
+                orientation: 'horizontal'
                 size_hint_y: None
-                height: "50dp"  # Adjusted to fit both labels without too much space
-                spacing: "5dp"  # Reduced spacing for a compact look
+                height: "40dp"
+                spacing: "10dp"
                 pos_hint: {"center_x": 0.5}
 
-                Label:
+                Button:
                     text: "Sign Up"
-                    color: (0, 0, 0, 1)
-                    font_size: '16sp'
-                    size_hint_y: None
-                    height: "20dp"  # Adjusted height
+                    background_color: (0, 0, 0, 0)
+                    color: (0, 0, 1, 1)
+                    on_press: root.go_to_signup()
 
-                Label:
+                Button:
                     text: "Forgot Password?"
-                    color: (0, 0, 0, 1)
-                    font_size: '16sp'
-                    size_hint_y: None
-                    height: "20dp"  # Adjusted height
+                    background_color: (0, 0, 0, 0)
+                    color: (0, 0, 1, 1)
+                    on_press: root.forgot_password()
 
             # Sign In Button
             Button:
@@ -89,198 +94,160 @@
                 height: "45dp"
                 pos_hint: {"center_x": 0.5}
                 background_color: (0.1, 0.4, 0.6, 1)  # Darker blue
+                on_press: root.login()
 
-
-
-
-<SearchMedicineScreen>:
+<MainScreen>:
     BoxLayout:
-        padding: 10
         orientation: 'vertical'
+
+        ScreenManager:
+            id: main_screen_manager
+            HomeScreen:
+                name: 'home_screen'
+            SearchMedicineScreen:
+                name: 'medicine_screen'
+            SearchArticlesScreen:
+                name: 'article_screen'
+            WeGamingScreen:
+                name: 'gaming_screen'
+            MapScreen:
+                name: 'map_screen'
+
         BoxLayout:
             size_hint_y: None
-            height: '50dp'
+            height: '80dp'
             spacing: 5
-            TextInput:
-                hint_text: 'Search for the type of medicine you need.'
-                multiline: False
-                size_hint_y: None
-                height: '50dp'
+
+            canvas.before:
+                Color:
+                    rgba: (1.0, 0.976, 0.913, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
             Button:
-                text: 'Search'
-                height: '50dp'
-                width: '50dp'
-                size_hint_x: None
-                size_hint_y: None
-        BoxLayout:
-            ColoredBox:
-                color: (1, 1, 1, 0.25)
-                size_hint_x: 0.5
-            ColoredBox:
-                color: (1, 1, 1, 0.5)
-                size_hint_x: 0.5
-
-<ColoredBox@Widget>
-    color: (1, 1, 1, 1)
-    canvas.before:
-        Color: 
-            rgba: root.color
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-
-<SearchArticlesScreen>:
-    BoxLayout:
-        padding: 10
-        orientation: 'vertical'
-        BoxLayout:
-            size_hint_y: None
-            height: '50dp'
-            spacing: 5
-            TextInput:
-                hint_text: 'Search for articles.'
-                multiline: False
-                size_hint_y: None
-                height: '50dp'
+                background_normal: "logos/home_logo.png"
+                on_release: main_screen_manager.current = 'home_screen'
             Button:
-                text: 'Search'
-                height: '50dp'
-                width: '50dp'
-                size_hint_x: None
-                size_hint_y: None
-
-
-        BoxLayout:
-            ColoredBox:
-                color: (1, 1, 1, 0.75)
-
-<WeGamingScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            orientation: 'vertical'
-            padding: 10
-
-            Label:
-                id: score_label
-                text: "Score: " + str(root.score)
-                size_hint_y: None
-                height: '30dp'
-
-            Image:
-                id: img
-                source: root.image_source
-                size_hint_y: 0.6
-
-            GridLayout:
-                cols: 1
-                spacing: 10
-                size_hint_y: 0.4
-
-                Button:
-                    id: choice_1
-                    on_press: root.check_answer(self)
-                Button:
-                    id: choice_2
-                    on_press: root.check_answer(self)
-
-        BoxLayout:
-            size_hint_y: None
-            height: '100dp'
+                background_normal: "logos/article_logo.png"
+                on_release: main_screen_manager.current = 'article_screen'
             Button:
-                text: 'Home'
-                on_press: app.root.current = 'home_screen'
+                background_normal: "logos/game_logo.png"
+                on_release: main_screen_manager.current = 'gaming_screen'
             Button:
-                text: 'Search Medicine'
-                on_press: app.root.current = 'medicine_screen'
+                background_normal: "logos/map_logo.png"
+                on_release: main_screen_manager.current = 'map_screen'
             Button:
-                text: 'Research Articles'
-                on_press: app.root.current = 'article_screen'
-            Button:
-                text: 'Game'
-                on_press: app.root.current = 'gaming_screen'
-            Button:
-                text: 'Nearest Drug Stores'
-                on_press: app.root.current = 'map_screen'
-
-ScreenManager:
-    id: screen_manager
-    LoginScreen:
-        name: "login_screen"
-    HomeScreen:
-        name: 'home_screen'
-    SearchMedicineScreen:
-        name: 'medicine_screen'
-    SearchArticlesScreen:
-        name: 'article_screen'
-    WeGamingScreen:
-        name: 'gaming_screen'
-    MapScreen:
-        name: 'map_screen'
-
+                background_normal: "logos/man_logo.png"
+                on_release: main_screen_manager.current = 'medicine_screen'
 
 <HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
         padding: 10
-
+        canvas.before:
+            Color:
+                rgba: (0.678, 0.85, 0.921, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
         Label:
-            text: 'This is the home screen. You must log in first.'
+            text: 'Welcome to the Home Screen!'
             font_size: '18sp'
             size_hint_y: None
             height: '50dp'
+        
 
-        BoxLayout:
+<SearchMedicineScreen>:
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: (0.678, 0.85, 0.921, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        TextInput:
+            hint_text: 'Search for the type of medicine you need.'
+            multiline: False
+        Button:
+            text: 'Search'
+        
+
+<SearchArticlesScreen>:
+    BoxLayout:
+        padding: 10
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: (0.678, 0.85, 0.921, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        TextInput:
+            hint_text: 'Search for articles.'
+            multiline: False
+        Button:
+            text: 'Search'
+        
+
+<WeGamingScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: (0.678, 0.85, 0.921, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Score: " + str(root.score)
             size_hint_y: None
-            height: '100dp'
+            height: '30dp'
+        Image:
+            id: img
+            source: root.image_source
+            size_hint_y: 0.6
+        GridLayout:
+            cols: 1
+            spacing: 10
+            size_hint_y: 0.4
             Button:
-                text: 'Home'
-                on_press: app.root.current = 'home_screen'
+                id: choice_1
+                background_color: (0,0,0,0)
+                on_press: root.check_answer(self)
+                canvas.before:
+                    Color: 
+                        rgba: 0.247, 0.517, 0.631, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
             Button:
-                text: 'Search Medicine'
-                on_press: app.root.current = 'medicine_screen'
-            Button:
-                text: 'Research Articles'
-                on_press: app.root.current = 'article_screen'
-            Button:
-                text: 'Game'
-                on_press: app.root.current = 'gaming_screen'
-            Button:
-                text: 'Nearest Drug Stores'
-                on_press: app.root.current = 'map_screen'
-            
+                id: choice_2
+                background_color: (0,0,0,0)
+                on_press: root.check_answer(self)
+                canvas.before:
+                    Color:
+                        rgba: 0.247, 0.517, 0.631, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [20]
+        
 
 <MapScreen>:
     BoxLayout:
         orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: (0.678, 0.85, 0.921, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
         MapView:
             id: map_view
             lat: 14.8527
             lon: 120.8160
-            zoom: 20
-
-        BoxLayout:
-            size_hint_y: None
-            height: '100dp'
-            Button:
-                text: 'Home'
-                on_press: app.root.current = 'home_screen'
-            Button:
-                text: 'Search Medicine'
-                on_press: app.root.current = 'medicine_screen'
-            Button:
-                text: 'Research Articles'
-                on_press: app.root.current = 'article_screen'
-            Button:
-                text: 'Game'
-                on_press: app.root.current = 'gaming_screen'
-            Button:
-                text: 'Nearest Drug Stores'
-                on_press: app.root.current = 'map_screen'
-
-
-
-    
-
-
+            zoom: 15
+        
