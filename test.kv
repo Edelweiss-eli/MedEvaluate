@@ -4,8 +4,12 @@ ScreenManager:
     id: screen_manager
     LoginScreen:
         name: "login_screen"
+    SignUpScreen:
+        name: "signup_screen"
     MainScreen:
         name: "main_screen"
+
+
 
 <LoginScreen>:
     FloatLayout:
@@ -35,7 +39,7 @@ ScreenManager:
 
             Label:
                 text: "MediEvaluate"
-                font_size: '24sp'
+                font_size: '30sp'
                 bold: True
                 color: (0, 0, 0, 1)
                 size_hint_y: None
@@ -81,12 +85,6 @@ ScreenManager:
                     color: (0, 0, 1, 1)
                     on_press: root.go_to_signup()
 
-                Button:
-                    text: "Forgot Password?"
-                    background_color: (0, 0, 0, 0)
-                    color: (0, 0, 1, 1)
-                    on_press: root.forgot_password()
-
             # Sign In Button
             Button:
                 text: "Sign In"
@@ -115,30 +113,99 @@ ScreenManager:
 
         BoxLayout:
             size_hint_y: None
-            height: '80dp'
+            height: '75dp'
             spacing: 5
 
             canvas.before:
                 Color:
                     rgba: (1.0, 0.976, 0.913, 1)
-                Rectangle:
+                RoundedRectangle:
                     pos: self.pos
                     size: self.size
+                    radius: [10]
             Button:
                 background_normal: "logos/home_logo.png"
+                size_hint: None, None
+                width: self.height
+                height: min(root.width / 5, 75)  
                 on_release: main_screen_manager.current = 'home_screen'
             Button:
                 background_normal: "logos/article_logo.png"
+                size_hint: None, None
+                width: self.height
+                height: min(root.width / 5, 75) 
                 on_release: main_screen_manager.current = 'article_screen'
             Button:
                 background_normal: "logos/game_logo.png"
+                size_hint: None, None
+                width: self.height
+                height: min(root.width / 5, 75) 
                 on_release: main_screen_manager.current = 'gaming_screen'
             Button:
                 background_normal: "logos/map_logo.png"
+                size_hint: None, None
+                width: self.height
+                height: min(root.width / 5, 75) 
                 on_release: main_screen_manager.current = 'map_screen'
             Button:
                 background_normal: "logos/man_logo.png"
+                size_hint: None, None
+                width: self.height
+                height: min(root.width / 5, 75) 
                 on_release: main_screen_manager.current = 'medicine_screen'
+
+<SignUpScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(20)
+        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: (0.678, 0.85, 0.921, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Button:
+            text: "Back to Login"
+            size_hint_y: None
+            height: dp(50)
+            background_color: (0.1, 0.4, 0.6, 1)
+            on_release: app.root.current = 'login_screen'
+        Label:
+            text: "Sign Up"
+            font_size: "24sp"
+            bold: True
+            size_hint_y: None
+            height: dp(40)
+        Label:
+            text: "Email:"
+            size_hint_y: None
+            height: dp(20)
+        TextInput:
+            id: email_input
+            hint_text: "Enter email"
+            multiline: False
+        Label:
+            text: "Password:"
+            size_hint_y: None
+            height: dp(20)
+        TextInput:
+            id: password_input
+            hint_text: "Enter password"
+            password: True
+            multiline: False
+        Button:
+            text: "Sign Up"
+            size_hint_y: None
+            height: dp(50)
+            background_color: (0.1, 0.4, 0.6, 1)
+            on_release: root.sign_up()
+        Label:
+            id: message_label
+            text: ""
+            size_hint_y: None
+            height: dp(40)
+
 
 <HomeScreen>:
     BoxLayout:
@@ -176,7 +243,6 @@ ScreenManager:
 
 <SearchArticlesScreen>:
     BoxLayout:
-        padding: 10
         orientation: 'vertical'
         canvas.before:
             Color:
@@ -184,12 +250,24 @@ ScreenManager:
             Rectangle:
                 pos: self.pos
                 size: self.size
-        TextInput:
-            hint_text: 'Search for articles.'
-            multiline: False
-        Button:
-            text: 'Search'
-        
+        Label:
+            text: "Medical News"
+            size_hint_y: None
+            height: "50dp"
+            font_size: "24sp"
+            bold: True
+
+        ScrollView:
+            size_hint: 1, 1
+            do_scroll_x: False
+
+            GridLayout:
+                id: article_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+                padding: 10
 
 <WeGamingScreen>:
     BoxLayout:
@@ -204,7 +282,7 @@ ScreenManager:
             text: "Score: " + str(root.score)
             size_hint_y: None
             height: '30dp'
-        Image:
+        AsyncImage:
             id: img
             source: root.image_source
             size_hint_y: 0.6
