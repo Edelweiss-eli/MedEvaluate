@@ -1,11 +1,14 @@
-#:import MapView kivy.garden.mapview.MapView
 
 ScreenManager:
     id: screen_manager
     LoginScreen:
         name: "login_screen"
+    SignUpScreen:
+        name: "signup_screen"
     MainScreen:
         name: "main_screen"
+
+
 
 <LoginScreen>:
     FloatLayout:
@@ -13,7 +16,7 @@ ScreenManager:
         
         # Background image
         Image:
-            source: 'loginscreen.png'
+            source: root.loginscreen_path
             allow_stretch: True
             keep_ratio: False
             size_hint: 1, 0.45
@@ -35,9 +38,9 @@ ScreenManager:
 
             Label:
                 text: "MediEvaluate"
-                font_size: '24sp'
+                font_size: '30sp'
                 bold: True
-                color: (0, 0, 0, 1)
+                color: (0.18, 0.23, 0.41, 1)
                 size_hint_y: None
                 height: "50dp"
 
@@ -54,7 +57,7 @@ ScreenManager:
                     size_hint: 0.9, None
                     height: "40dp"
                     pos_hint: {"center_x": 0.5}
-                    background_color: (1, 1, 1, 0.3)
+                    background_color: (0.86, 0.93, 0.97, 1)
                     foreground_color: (0, 0, 0, 1)
 
                 TextInput:
@@ -64,7 +67,7 @@ ScreenManager:
                     size_hint: 0.9, None
                     height: "40dp"
                     pos_hint: {"center_x": 0.5}
-                    background_color: (1, 1, 1, 0.3)
+                    background_color: (0.86, 0.93, 0.97, 1)
                     foreground_color: (0, 0, 0, 1)
 
             # Sign Up and Forgot Password buttons
@@ -78,14 +81,8 @@ ScreenManager:
                 Button:
                     text: "Sign Up"
                     background_color: (0, 0, 0, 0)
-                    color: (0, 0, 1, 1)
+                    color: (0.18, 0.23, 0.41, 1)
                     on_press: root.go_to_signup()
-
-                Button:
-                    text: "Forgot Password?"
-                    background_color: (0, 0, 0, 0)
-                    color: (0, 0, 1, 1)
-                    on_press: root.forgot_password()
 
             # Sign In Button
             Button:
@@ -93,17 +90,23 @@ ScreenManager:
                 size_hint: 0.6, None
                 height: "45dp"
                 pos_hint: {"center_x": 0.5}
-                background_color: (0.1, 0.4, 0.6, 1)  # Darker blue
+                background_normal: ""
+                background_color: (1, 1, 1, 1)
+                color: (0.18, 0.23, 0.41, 1)
                 on_press: root.login()
 
 <MainScreen>:
+    current_screen: 'article_screen'
     BoxLayout:
         orientation: 'vertical'
-
         ScreenManager:
             id: main_screen_manager
-            HomeScreen:
-                name: 'home_screen'
+            canvas.before:
+                Rectangle:
+                    source: root.background_path
+                    pos: self.pos
+                    size: self.size
+
             SearchMedicineScreen:
                 name: 'medicine_screen'
             SearchArticlesScreen:
@@ -112,142 +115,306 @@ ScreenManager:
                 name: 'gaming_screen'
             MapScreen:
                 name: 'map_screen'
+            ProfileScreen:
+                name: 'profile_screen'
 
         BoxLayout:
-            size_hint_y: None
-            height: '80dp'
+            size_hint_y: 0.1
             spacing: 5
 
             canvas.before:
                 Color:
-                    rgba: (1.0, 0.976, 0.913, 1)
-                Rectangle:
+                    rgba: (1.0, 1, 1, 1)
+                RoundedRectangle:
                     pos: self.pos
                     size: self.size
+                    radius: [10]
             Button:
-                background_normal: "logos/home_logo.png"
-                on_release: main_screen_manager.current = 'home_screen'
-            Button:
-                background_normal: "logos/article_logo.png"
+                background_normal: root.home_logo_path
+                size_hint_x: 0.2  # 1/5 of the screen width
                 on_release: main_screen_manager.current = 'article_screen'
             Button:
-                background_normal: "logos/game_logo.png"
+                background_normal: root.article_logo_path
+                size_hint_x: 0.2  # 1/5 of the screen width
                 on_release: main_screen_manager.current = 'gaming_screen'
             Button:
-                background_normal: "logos/map_logo.png"
+                background_normal: root.game_logo_path
+                size_hint_x: 0.2  # 1/5 of the screen width
+                on_release: main_screen_manager.current = 'medicine_screen'
+            Button:
+                background_normal: root.map_logo_path
+                size_hint_x: 0.2  # 1/5 of the screen width
                 on_release: main_screen_manager.current = 'map_screen'
             Button:
-                background_normal: "logos/man_logo.png"
-                on_release: main_screen_manager.current = 'medicine_screen'
+                background_normal: root.man_logo_path
+                size_hint_x: 0.2  # 1/5 of the screen width
+                on_release: main_screen_manager.current = 'profile_screen'
 
-<HomeScreen>:
+<SignUpScreen>:
     BoxLayout:
-        orientation: 'vertical'
-        padding: 10
+        orientation: "vertical"
+        padding: dp(20)
+        spacing: dp(10)
         canvas.before:
             Color:
                 rgba: (0.678, 0.85, 0.921, 1)
             Rectangle:
                 pos: self.pos
                 size: self.size
+        Button:
+            text: "Back to Login"
+            size_hint_y: None
+            height: dp(50)
+            background_color: (0.1, 0.4, 0.6, 1)
+            on_release: app.root.current = 'login_screen'
         Label:
-            text: 'Welcome to the Home Screen!'
+            text: "Sign Up"
+            font_size: "24sp"
+            bold: True
+            size_hint_y: None
+            height: dp(40)
+        Label:
+            text: "Email:"
+            size_hint_y: None
+            height: dp(20)
+        TextInput:
+            id: email_input
+            hint_text: "Enter email"
+            multiline: False
+        Label:
+            text: "Password:"
+            size_hint_y: None
+            height: dp(20)
+        TextInput:
+            id: password_input
+            hint_text: "Enter password"
+            password: True
+            multiline: False
+        Button:
+            text: "Sign Up"
+            size_hint_y: None
+            height: dp(50)
+            background_color: (0.1, 0.4, 0.6, 1)
+            on_release: root.sign_up()
+        Label:
+            id: message_label
+            text: ""
+            size_hint_y: None
+            height: dp(40)
+
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        Label:
+            text: "[b]Profile[/b]"
+            markup: True
+            size_hint_y: None
+            color: 1, 1, 1, 1
+            height: '30dp'
+        Label:
+            text: 'Welcome to the Profile Screen!'
             font_size: '18sp'
             size_hint_y: None
             height: '50dp'
+
+        Label:
+            id: score_label
+            text: "Loading..."  # Default text while fetching data
+            font_size: 24
+            size_hint_y: None
+            color: 0, 0, 0, 1
+            height: self.texture_size[1]  # Adjust height based on the text size
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # Background color (White in this case)
+                RoundedRectangle:
+                    pos: self.x + dp(10), self.y - 10
+                    size: self.width - dp(20), self.height + 20
+                    radius: [20]
+
+        Widget:
+            size_hint_y: 1
         
 
 <SearchMedicineScreen>:
     BoxLayout:
-        padding: 10
         orientation: 'vertical'
-        canvas.before:
-            Color:
-                rgba: (0.678, 0.85, 0.921, 1)
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        TextInput:
-            hint_text: 'Search for the type of medicine you need.'
-            multiline: False
-        Button:
-            text: 'Search'
+        padding: 10
+        spacing: 10
+        Spinner:
+            id: category_spinner
+            text: 'Select Pharmacologic Category'
+            values: []
+            background_color: (0.247, 0.517, 0.631, 1)
+            on_text: root.on_category_select(self, self.text)
         
+        Spinner:
+            id: medicine_spinner
+            text: 'Select Generic Name'
+            values: []
+            background_color: (0.247, 0.517, 0.631, 1)
+            on_text: root.on_medicine_select(self, self.text)
+            disabled: True
+        
+        Spinner:
+            id: dosage_spinner
+            text: 'Select Dosage Strength and Form'
+            values: []
+            background_color: (0.247, 0.517, 0.631, 1)
+            on_text: root.on_dosage_select(self, self.text)
+            disabled: True
+        
+        Spinner:
+            id: form_spinner
+            text: 'Select Dosage Form'
+            values: []
+            background_color: (0.247, 0.517, 0.631, 1)
+            on_text: root.on_form_select(self, self.text)
+            disabled: True
+        
+        Spinner:
+            id: brand_spinner
+            text: 'Select Brand Name'
+            values: []
+            background_color: (0.247, 0.517, 0.631, 1)
+            disabled: True
 
 <SearchArticlesScreen>:
     BoxLayout:
-        padding: 10
         orientation: 'vertical'
-        canvas.before:
-            Color:
-                rgba: (0.678, 0.85, 0.921, 1)
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        TextInput:
-            hint_text: 'Search for articles.'
-            multiline: False
-        Button:
-            text: 'Search'
-        
+        Label:
+            text: "[b]Medical News[/b]"
+            markup: True
+            size_hint_y: None
+            height: "50dp"
+            font_size: "24sp"
+            bold: True
+
+        ScrollView:
+            size_hint: 1, 1
+            do_scroll_x: False
+
+            GridLayout:
+                id: article_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+                padding: 10
 
 <WeGamingScreen>:
-    BoxLayout:
+    FloatLayout:
         orientation: 'vertical'
-        canvas.before:
-            Color:
-                rgba: (0.678, 0.85, 0.921, 1)
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        Label:
-            text: "Score: " + str(root.score)
-            size_hint_y: None
-            height: '30dp'
-        Image:
-            id: img
-            source: root.image_source
-            size_hint_y: 0.6
-        GridLayout:
-            cols: 1
-            spacing: 10
-            size_hint_y: 0.4
-            Button:
-                id: choice_1
-                background_color: (0,0,0,0)
-                on_press: root.check_answer(self)
-                canvas.before:
-                    Color: 
-                        rgba: 0.247, 0.517, 0.631, 1
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [20]
-            Button:
-                id: choice_2
-                background_color: (0,0,0,0)
-                on_press: root.check_answer(self)
-                canvas.before:
-                    Color:
-                        rgba: 0.247, 0.517, 0.631, 1
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [20]
+        BoxLayout:
+            padding: ["10dp", "10dp", "10dp", "10dp"]
+            orientation: 'vertical'
+            canvas.before:
+                Color:
+                    rgba: (0.678, 0.85, 0.921, 0)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Label:
+                text: "[b]Quiz[/b]"
+                markup: True
+                size_hint_y: None
+                color: 1, 1, 1, 1
+                height: '30dp'
+            Label:
+                id: score_label
+                text: "Score: " + str(root.score)
+                size_hint_y: None
+                color: 1, 1, 1, 1
+                height: '30dp'
+            AsyncImage:
+                id: img
+                source: root.image_source
+                size_hint_y: 0.6
+            GridLayout:
+                cols: 1
+                spacing: 10
+                size_hint_y: 0.4
+                Button:
+                    id: choice_1
+                    background_color: (0,0,0,0)
+                    on_press: root.check_answer(self)
+                    color: (0.18, 0.23, 0.41, 1)
+                    font_size: '20sp'
+                    canvas.before:
+                        Color: 
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [20]
+                Button:
+                    id: choice_2
+                    background_color: (0,0,0,0)
+                    on_press: root.check_answer(self)
+                    color: (0.18, 0.23, 0.41, 1)
+                    font_size: '20sp'
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [20]
         
 
 <MapScreen>:
-    BoxLayout:
+    FloatLayout:
         orientation: 'vertical'
-        canvas.before:
-            Color:
-                rgba: (0.678, 0.85, 0.921, 1)
-            Rectangle:
-                pos: self.pos
-                size: self.size
         MapView:
             id: map_view
             lat: 14.8527
             lon: 120.8160
             zoom: 15
         
+        FloatLayout:
+            size_hint_y: 0.33
+            padding: 10
+            canvas.before:
+                Color:
+                    rgba: (0.7, 0.87, 1, 1)
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [20]
+
+            Label:
+                text: "Drugstore Nearby"
+                font_size: '30sp'
+                bold: True
+                color: (0.18, 0.23, 0.41, 1)
+                size_hint: None, None
+                size: self.texture_size
+                pos_hint: {"center_x": 0.5, "top": 1}
+            
+            RecycleView:
+                id: nearby_list
+                size_hint: 1, 0.8
+                pos_hint: {"center_x": 0.5, "y": 0.05}
+                viewclass: 'NearbyLocationButton'
+
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    padding: dp(10)
+                    spacing: dp(10)
+
+<NearbyLocationButton@Button>:
+    size_hint_y: None
+    height: dp(50)
+    background_normal: ""
+    background_color: (1, 1, 1, 1)
+    color: (0.18, 0.23, 0.41, 1)
+    font_size: '18sp'
+    text: "Test Button"
+        
+            
